@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.04@sha256:0e0402cd13f68137edb0266e1d2c682f217814420f2d43d300ed8f65479b14fb
 
 RUN apt-get update -y
 RUN apt-get install vim wget curl -y
@@ -9,7 +9,7 @@ RUN apt-get install vim wget curl -y
 RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 
 # Import the repository signing key:
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 # Update the package lists:
 RUN apt-get update -y
