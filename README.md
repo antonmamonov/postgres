@@ -1,5 +1,7 @@
 # Containerized postgreSQL with Kubernetes
 
+<img src='images/mascot.png' width='420' height='420'/>
+
 ## Quick Kubernetes setup
 
 ### Quick deploy with persistent data volume
