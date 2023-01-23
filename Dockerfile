@@ -1,19 +1,33 @@
 FROM ubuntu:20.04@sha256:0e0402cd13f68137edb0266e1d2c682f217814420f2d43d300ed8f65479b14fb
 
-RUN apt-get update -y
-RUN apt-get install vim wget curl -y
+RUN apt-get update --fix-missing -y
+# needed for development
+RUN apt-get install vim wget curl gnupg -y
 
-# Install postgres as instructed from https://www.postgresql.org/download/linux/ubuntu/
+# need for building postgres
+RUN apt-get install build-essential gcc -y
 
-# Create the file repository configuration:
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+# additional packages
+RUN apt-get install libreadline-dev zlib1g-dev flex bison -y
 
-# Import the repository signing key:
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+WORKDIR /postgresworkdir
+COPY postgres /postgresworkdir/postgres
 
-# Update the package lists:
-RUN apt-get update -y
+# build postgres
+RUN cd postgres && ./configure && make && make install
 
-# Install the latest version of PostgreSQL.
-# If you want a specific version, use 'postgresql-12' or similar instead of 'postgresql':
-RUN apt-get -y install postgresql-15
+# clean up source files
+RUN rm -rf postgres
+
+RUN useradd -m postgres
+WORKDIR /home/postgres
+USER postgres
+RUN mkdir /home/postgres/data
+ENV PATH="${PATH}:/usr/local/pgsql/bin"
+
+# postgres related environment variables
+ENV PGDATA="/home/postgres/data"
+
+COPY entrypoint.sh /home/postgres/entrypoint.sh
+
+ENTRYPOINT [ "/home/postgres/entrypoint.sh" ]

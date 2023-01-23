@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: single-postgres
+  labels:
+    app: single-postgres
+spec:
+  serviceName: "single-postgres"
+  selector:
+    matchLabels:
+      app: single-postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: single-postgres
+    spec:
+      initContainers:
+        - name: take-data-dir-ownership
+          image: ubuntu:20.04@sha256:0e0402cd13f68137edb0266e1d2c682f217814420f2d43d300ed8f65479b14fb
+          # Give `postgres` user (id 1000) permissions
+          command:
+          - chown
+          - -R
+          - 1000:1000
+          - /pgdata
+          volumeMounts:
+          - name: pgdata
+            mountPath: /pgdata
+      containers:
+        - name: main
+          image: antonm/postgres:v0.0.1
+          tty: true
+          stdin: true
+
+          command: ["/bin/bash"]
+          # sleep infinity
+          args: ["-c", "while true; do sleep 30; done;"]
+
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: single-postgres-password
+                  key: postgrespassword
+          volumeMounts:
+            - mountPath: "/home/postgres/data"
+              name: "pgdata"
+      restartPolicy: "Always"
+      volumes:
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: postgres-data-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: single-pg-postgresql
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+  selector:
+    app: single-postgres

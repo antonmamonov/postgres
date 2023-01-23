@@ -1,0 +1,6 @@
+#!/bin/sh
+# src/tools/make_etags
+
+cdir=`dirname $0`
+dir=`(cd $cdir && pwd)`
+exec $dir/make_ctags -e $*
