@@ -7,8 +7,10 @@ docker rm -f $CONTAINERNAME
 
 docker run -t -d \
     --name $CONTAINERNAME \
-    -p 5432:5432 \
+    --network=host \
     --entrypoint=/bin/bash \
+    -v $PWD:/home/postgres/workdir \
+    -e POSTGRES_HOST=$POSTGRES_HOST \
     -e PGPASSWORD=$PGPASSWORD \
     $IMAGENAME
 

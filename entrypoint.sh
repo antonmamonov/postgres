@@ -1,7 +1,6 @@
 #!/bin/bash
 
-echo "Starting Anton PostgreSQL"
-date
+echo "[$(date)] Starting Anton PostgreSQL"
 
 # check if the data directory has postgresql.conf
 if [ ! -f $PGDATA/postgresql.conf ]; then
