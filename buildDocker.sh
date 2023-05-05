@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build --squash -t antonm/postgres:v0.0.1 .
+docker build --squash -t antonm/postgres:v0.0.2 .

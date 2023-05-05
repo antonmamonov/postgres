@@ -6,7 +6,7 @@ echo "[$(date)] Starting Anton PostgreSQL"
 if [ ! -f $PGDATA/postgresql.conf ]; then
     echo "Data directory is empty"
     echo "Initializing database"
-    initdb   
+    initdb -E UTF8 
 fi
 
 postgres

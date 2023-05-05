@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGENAME=antonm/postgres:v0.0.1
+IMAGENAME=antonm/postgres:v0.0.2
 CONTAINERNAME=pg
 
 docker rm -f $CONTAINERNAME

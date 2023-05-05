@@ -17,7 +17,7 @@ spec:
     spec:
       initContainers:
         - name: take-data-dir-ownership
-          image: ubuntu:20.04@sha256:0e0402cd13f68137edb0266e1d2c682f217814420f2d43d300ed8f65479b14fb
+          image: ubuntu:20.04
           # Give `postgres` user (id 1000) permissions
           command:
           - chown
@@ -29,7 +29,7 @@ spec:
             mountPath: /pgdata
       containers:
         - name: main
-          image: antonm/postgres:v0.0.1
+          image: antonm/postgres:v0.0.2
           tty: true
           stdin: true
 
