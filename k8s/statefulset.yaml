@@ -15,18 +15,18 @@ spec:
       labels:
         app: single-postgres
     spec:
-      initContainers:
-        - name: take-data-dir-ownership
-          image: ubuntu:20.04
-          # Give `postgres` user (id 1000) permissions
-          command:
-          - chown
-          - -R
-          - 1000:1000
-          - /pgdata
-          volumeMounts:
-          - name: pgdata
-            mountPath: /pgdata
+      # initContainers:
+      #   - name: take-data-dir-ownership
+      #     image: ubuntu:20.04
+      #     # Give `postgres` user (id 1000) permissions
+      #     command:
+      #     - chown
+      #     - -R
+      #     - 1000:1000
+      #     - /pgdata
+      #     volumeMounts:
+      #     - name: pgdata
+      #       mountPath: /pgdata
       containers:
         - name: main
           image: antonm/postgres:v0.0.2

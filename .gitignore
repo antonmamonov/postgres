@@ -1,2 +1,2 @@
-dump_v1.sql
-dump_v*.sql
+*.sql
+*.sql.zip

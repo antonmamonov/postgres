@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt-get update --fix-missing -y
 # needed for development
@@ -27,6 +27,12 @@ ENV PATH="${PATH}:/usr/local/pgsql/bin"
 
 # postgres related environment variables
 ENV PGDATA="/home/postgres/data"
+
+# install kubectl
+RUN curl -LO https://dl.k8s.io/release/v1.26.5/bin/linux/amd64/kubectl
+RUN curl -LO https://dl.k8s.io/release/v1.26.5/bin/linux/amd64/kubectl.sha256
+RUN echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 COPY entrypoint.sh /home/postgres/entrypoint.sh
 
